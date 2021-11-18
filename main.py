@@ -27,12 +27,12 @@ def get_wines(filename: str) -> defaultdict:
     categories.
     """
     excel_df = pd.read_excel(filename, na_values='nan', keep_default_na='')
-    excel_df_sorted = excel_df.sort_values(by='Категория')
-    wines = excel_df_sorted.to_dict(orient='records')
-    wine_sorted_by_categories = defaultdict(list)
+    sorted_excel_df = excel_df.sort_values(by='Категория')
+    wines = sorted_excel_df.to_dict(orient='records')
+    sorted_by_categories_wine = defaultdict(list)
     for wine in wines:
-        wine_sorted_by_categories[wine['Категория']].append(wine)
-    return wine_sorted_by_categories
+        sorted_by_categories_wine[wine['Категория']].append(wine)
+    return sorted_by_categories_wine
 
 
 def main() -> None:
