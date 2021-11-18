@@ -6,9 +6,12 @@ import pandas as pd
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
+WINERY_ESTABLISHED_YEAR = 1920
+
+
 def get_winery_age() -> str:
     """Calculate winery age and return proper string."""
-    winery_age = str(datetime.now().year - 1920)
+    winery_age = str(datetime.now().year - WINERY_ESTABLISHED_YEAR)
     if winery_age[-1] == '1' and winery_age[-2] != '1':
         winery_age += ' год'
     elif (int(winery_age[-1]) in range(2,5)) and winery_age[-2] != '1':
