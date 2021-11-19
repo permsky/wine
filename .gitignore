@@ -2,4 +2,4 @@ env/
 .vscode/
 .git
 index.html
-*.xlsx
+.env
