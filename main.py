@@ -1,8 +1,11 @@
+import os
 from collections import defaultdict
 from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+import click
 import pandas as pd
+from dotenv import load_dotenv
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
@@ -35,17 +38,30 @@ def get_wines(filename: str) -> defaultdict:
     return sorted_by_categories_wine
 
 
-def main() -> None:
+@click.command()
+@click.option(
+    '--path',
+    default='wines.xlsx',
+    help='Путь к xlsx-файлу с таблицей вин'
+)
+@click.option(
+    '--var',
+    help='Имя переменной окружения, хранящей путь к xlsx-файлу с таблицей вин'
+)
+def main(path, var) -> None:
     """Render index.html and start HTTP server."""
+    load_dotenv()
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html', 'xml'])
     )
     
+    if var:
+        path = os.getenv(var)
     template = env.get_template('template.html')
     rendered_page = template.render(
         winery_age=get_winery_age(),
-        wines=get_wines('wine3.xlsx')
+        wines=get_wines(path)
     )
 
     with open('index.html', 'w', encoding='utf8') as file:
