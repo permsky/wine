@@ -40,15 +40,17 @@ def get_wines(filename: str) -> defaultdict:
 
 @click.command()
 @click.option(
+    '-p',
     '--path',
     default='wines.xlsx',
     help='Путь к xlsx-файлу с таблицей вин'
 )
 @click.option(
-    '--var',
+    '-pe',
+    '--path-from-env',
     help='Имя переменной окружения, хранящей путь к xlsx-файлу с таблицей вин'
 )
-def main(path, var) -> None:
+def main(path, path_from_env) -> None:
     """Render index.html and start HTTP server."""
     load_dotenv()
     env = Environment(
@@ -56,8 +58,8 @@ def main(path, var) -> None:
         autoescape=select_autoescape(['html', 'xml'])
     )
     
-    if var:
-        path = os.getenv(var)
+    if path_from_env:
+        path = os.getenv(path_from_env)
     template = env.get_template('template.html')
     rendered_page = template.render(
         winery_age=get_winery_age(),
